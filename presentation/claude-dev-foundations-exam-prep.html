@@ -1,0 +1,1688 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Claude Developer Exam Prep</title>
+  <!--
+    Live presenter deck for "Claude Certified Developer – Foundations Exam Prep".
+    Press P for presenter notes, C to clone the window for a second screen.
+  -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
+
+    body { font-family: 'Inter', -apple-system, sans-serif; }
+
+    .remark-slide-content {
+      background: #f5f0e6;
+      color: #1a1a1a;
+      padding: 1.2em 2em;
+      font-size: 26px;
+      line-height: 1.4;
+    }
+    .remark-slide-content h1 { font-size: 1.7em; font-weight: 800; margin: 0.2em 0 0.4em; }
+    .remark-slide-content h2 { font-size: 1.25em; font-weight: 600; margin: 0.2em 0; color: #444; }
+    .remark-slide-content strong { font-weight: 700; }
+    .remark-slide-content em { color: #555; }
+    .remark-slide-content code, .remark-slide-content tt {
+      font-family: 'JetBrains Mono', monospace;
+      background: #ebe4d4;
+      padding: 0.05em 0.3em;
+      border-radius: 3px;
+      font-size: 0.9em;
+    }
+    .remark-slide-content blockquote {
+      border-left: 4px solid #d9a441;
+      padding: 0.4em 1em;
+      margin: 0.6em 0;
+      background: #fbf6e8;
+      font-style: italic;
+      color: #2a2a2a;
+    }
+
+    /* Tables: white field, dark header, ruled rows */
+    .remark-slide-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.6em;
+      font-size: 0.78em;
+      background: #fff;
+      border: 2px solid #1a1a1a;
+    }
+    .remark-slide-content th, .remark-slide-content td {
+      text-align: left;
+      vertical-align: top;
+      padding: 0.5em 0.7em;
+      border-bottom: 1px solid #ddd5c0;
+    }
+    .remark-slide-content thead th {
+      background: #1a1a1a;
+      color: #f5f0e6;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-size: 0.85em;
+    }
+    .remark-slide-content tbody tr:last-child td { border-bottom: none; }
+    .remark-slide-content tbody tr:nth-child(even) td { background: #faf7ee; }
+    .remark-slide-content tbody td:first-child { font-weight: 700; color: #b85c1f; }
+    /* Dense tables (7+ rows) step down one size */
+    .dense table { font-size: 0.68em; }
+    .dense th, .dense td { padding: 0.35em 0.6em; }
+
+    /* TITLE slides: dark, four-color top bar */
+    .title {
+      background: #1c1c1c;
+      color: #f5f0e6;
+      padding: 4em 2.5em 2em;
+      border-top: 12px solid;
+      border-image: linear-gradient(to right, #e26b5a 0%, #e26b5a 25%, #e7c548 25%, #e7c548 50%, #7eb069 50%, #7eb069 75%, #66a3d2 75%, #66a3d2 100%) 1;
+    }
+    .title h1 { font-size: 2.4em; line-height: 1.05; margin-bottom: 0.2em; color: #f5f0e6; }
+    .title h2 { color: #c9c4b5; font-weight: 400; font-size: 1.05em; }
+    .title a { color: #66a3d2; }
+    .title .session-label {
+      color: #e7c548; font-size: 0.75em; letter-spacing: 0.2em;
+      font-weight: 700; margin-bottom: 1em;
+    }
+    .title .footer {
+      position: absolute; bottom: 1.5em; left: 2.5em;
+      color: #e7c548; font-size: 0.6em; font-weight: 600;
+    }
+    .title .footer span { color: #888; font-weight: 400; display: block; margin-top: 0.2em; }
+
+    /* SECTION DIVIDER: title slide + domain chips + clock */
+    .divider { padding-top: 3em; }
+    .divider h1 { font-size: 2.1em; }
+    .divider .chips { display: block; margin-top: 1.2em; }
+    .divider .chip {
+      display: inline-block; border: 2px solid #e7c548; color: #f5f0e6;
+      padding: 0.3em 0.75em; margin: 0 0.5em 0.5em 0;
+      font-size: 0.75em; font-weight: 600;
+    }
+    .divider .chip strong { color: #e7c548; }
+
+    /* EYEBROW label above slide headline */
+    .eyebrow-label {
+      color: #b85c1f; font-size: 0.6em; letter-spacing: 0.15em;
+      font-weight: 700; text-transform: uppercase; margin-bottom: 0.2em;
+    }
+
+    /* SINGLE-STAT hero */
+    .stat { text-align: center; padding-top: 1.5em; }
+    .stat .hero { font-size: 5.5em; font-weight: 800; color: #b85c1f; line-height: 1; margin: 0.2em 0; }
+    .stat .caption { font-size: 0.95em; color: #444; margin-top: 0.4em; }
+
+    /* PULL QUOTE slide */
+    .quote-slide { padding-top: 2em; text-align: center; }
+    .quote-slide .quote-body { font-size: 1.5em; font-style: italic; color: #1a1a1a; max-width: 22em; margin: 0.5em auto; line-height: 1.35; }
+    .quote-slide .attrib { font-size: 0.75em; color: #777; margin-top: 1em; font-style: normal; letter-spacing: 0.05em; }
+
+    /* TWO-COLUMN compare */
+    .two-col { display: flex; gap: 1.5em; margin-top: 0.6em; }
+    .two-col > div { flex: 1; padding: 1em; border: 2px solid #1a1a1a; background: #fff; font-size: 0.85em; }
+    .two-col .col-head { font-weight: 700; color: #b85c1f; margin-bottom: 0.4em; letter-spacing: 0.05em; }
+    .two-col .col-head.green { color: #4d8a3a; }
+    .two-col .col-head.blue  { color: #4078a8; }
+    .two-col .col-head.amber { color: #c89020; }
+    .two-col ul { margin: 0.2em 0; padding-left: 1.1em; }
+    .two-col li { margin-bottom: 0.25em; }
+
+    /* CARD grids */
+    .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.8em; margin-top: 0.5em; }
+    .grid-4 .card { background: #fff; border: 2px solid #1a1a1a; padding: 0.8em 0.55em; font-size: 0.85em; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.8em; margin-top: 0.5em; }
+    .grid-3 .card { background: #fff; border: 2px solid #1a1a1a; padding: 0.8em; font-size: 0.9em; }
+    .grid-3 .tag, .grid-4 .tag { font-weight: 700; letter-spacing: 0.08em; display: block; margin-bottom: 0.3em; }
+    .grid-3 .tag { font-size: 1.05em; }
+    .grid-4 .tag { font-size: 1.05em; letter-spacing: 0.03em; white-space: nowrap; }
+    .grid-3 .w-tag, .grid-4 .w-tag { color: #b85c1f; }
+    .grid-3 .s-tag, .grid-4 .s-tag { color: #c89020; }
+    .grid-3 .c-tag, .grid-4 .c-tag { color: #4d8a3a; }
+    .grid-3 .i-tag, .grid-4 .i-tag { color: #4078a8; }
+    .card .maps { display: block; margin-top: 0.5em; font-size: 0.85em; font-weight: 700; color: #777; letter-spacing: 0.05em; }
+
+    /* Numbered list / takeaways */
+    .takeaways ol { list-style: none; padding-left: 0; margin-top: 0.5em; }
+    .takeaways li { display: flex; align-items: flex-start; margin-bottom: 0.55em; }
+    .takeaways li .num {
+      display: inline-block; width: 1.7em; height: 1.7em; line-height: 1.7em;
+      background: #1a1a1a; color: #f5f0e6; text-align: center;
+      font-weight: 700; margin-right: 0.8em; flex-shrink: 0;
+    }
+    .takeaways li .body strong { display: block; font-size: 1em; }
+    .takeaways li .body span { color: #555; font-size: 0.8em; display: block; margin-top: 0.1em; }
+
+    /* Verbatim objectives list */
+    .objectives ul { padding-left: 1.1em; }
+    .objectives li { margin-bottom: 0.45em; font-size: 0.92em; }
+    .source-line { display: block; color: #777; font-size: 0.6em; margin-top: 1em; font-style: italic; }
+
+    /* LIVE DEMO slides: blue field, banner with a red "recording" dot */
+    .demo {
+      background: #e9f0f6;
+      border-left: 16px solid #4078a8;
+    }
+    .demo-banner {
+      display: block; background: #4078a8; color: #fff;
+      font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase;
+      font-size: 0.62em; padding: 0.4em 0.9em; margin-bottom: 0.4em;
+    }
+    .demo-banner::before {
+      content: ''; display: inline-block; width: 0.75em; height: 0.75em;
+      border-radius: 50%; background: #e26b5a; margin-right: 0.7em;
+      vertical-align: -0.05em; box-shadow: 0 0 0 3px rgba(255,255,255,0.35);
+    }
+    .demo h1 { font-size: 1.4em; margin: 0.1em 0 0.3em; }
+    .demo ul { margin: 0.2em 0 0.4em; padding-left: 1em; font-size: 0.76em; }
+    .demo li { margin-bottom: 0.2em; }
+    .demo li strong { color: #4078a8; }
+
+    /* Prompt blocks (fenced code) */
+    .remark-slide-content pre { margin: 0.4em 0; }
+    .remark-slide-content pre code, .remark-slide-content .remark-code {
+      display: block; background: #1c1c1c; color: #f5f0e6;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6em; line-height: 1.45; padding: 0.7em 1em;
+      white-space: pre-wrap; border-radius: 4px;
+    }
+    .remark-code-line { white-space: pre-wrap; }
+    .remark-slide-content code, .remark-code { font-variant-ligatures: none; }
+
+    /* EXAM-STYLE QUESTION slides */
+    .question { background: #fff8ea; }
+    .answer { background: #f2f7ef; }
+    .q-label {
+      display: block; color: #b85c1f; font-size: 0.6em; letter-spacing: 0.15em;
+      font-weight: 700; text-transform: uppercase; margin-bottom: 0.5em;
+      border-bottom: 2px solid #b85c1f; padding-bottom: 0.3em;
+    }
+    .answer .q-label { color: #4d8a3a; border-color: #4d8a3a; }
+    .stem { display: block; font-size: 0.88em; line-height: 1.4; }
+    .options ul { list-style: none; padding-left: 0; margin-top: 0.6em; }
+    .options li {
+      background: #fff; border: 2px solid #1a1a1a; padding: 0.28em 0.7em;
+      margin-bottom: 0.35em; font-size: 0.78em;
+    }
+    .correct {
+      display: block; background: #4d8a3a; color: #fff;
+      padding: 0.45em 0.9em; font-weight: 700; font-size: 0.9em;
+    }
+    .answer table { font-size: 0.7em; }
+
+    /* Q&A / break cue */
+    .cue { text-align: center; }
+    .cue h1 { font-size: 2.6em; }
+    .cue .eyebrow-label { font-size: 0.8em; }
+  </style>
+</head>
+<body>
+  <textarea id="source">
+
+class: title
+
+.session-label[O'REILLY LIVE TRAINING · 2 HOURS]
+
+# Claude Certified Developer – Foundations Exam Prep
+
+## Walk the CCDV-F blueprint, drill exam-style questions across all eight domains, and leave with a study plan.
+
+.footer[Claude Certified Developer – Foundations (CCDV-F)<span>O'Reilly Live Training · Lucas Soares</span>]
+
+???
+Welcome. Two hours, five segments, eight domains, about fifteen exam-style questions as live polls.
+
+Goal: read a CCDV-F item, find the deciding constraint in the stem, name the distractor pattern behind each wrong option, and pick the purpose-built mechanism.
+
+Repo: github.com/EnkrateiaLucca/claude-dev-cert-prep. Practice questions, cheat sheet, exercises.
+
+All practice questions are original except the three official samples from the public exam guide.
+
+---
+
+# Today's plan
+
+| Segment | Clock | Domains | Weight |
+|---|---|---|---|
+| 1 · The exam + blueprint | 0:00–0:15 | All | · |
+| 2 · API, applications, models | 0:15–0:55 | D2 + D5 | 49.9% |
+| 3 · Agents, tools, MCP | 0:55–1:25 | D1 + D8 | 25.3% |
+| 4 · Prompting, context, security, Claude Code, debugging | 1:25–1:50 | D6 + D7 + D3 + D4 | 24.8% |
+| 5 · Readiness map + study plan | 1:50–2:00 | All | · |
+
+*Every segment ends with polls in the official item style.*
+
+???
+Time follows weight. Segment 2 gets the most time: Applications and Integration alone is a third of the exam.
+
+Break at the end of Segment 2.
+
+---
+
+class: title, divider
+
+.session-label[SEGMENT 1 · 0:00 → 0:15 · 15 MIN]
+
+# The exam and the blueprint
+
+.chips[
+.chip[Logistics]
+.chip[8 domains · 25 weighted skills]
+.chip[How items are written]
+]
+
+.footer[Exam Guide v1.0 · July 2026<span>research/01-exam-guide.md</span>]
+
+---
+
+# The exam at a glance
+
+| Item | Detail |
+|---|---|
+| Format | **53 items** · multiple choice + multiple response (item says how many) |
+| Time | 120 min · **~2 min 15 s per item** · plan ~135 min in the seat |
+| Pass | Scaled **720** on 100–1,000 · 720 ≠ 72% raw |
+| Delivery | **$125** · Pearson VUE, online (OnVUE) or test center · closed book |
+| Prereqs | None · recommended 1–5 yrs SWE + 6+ months with Claude |
+| Validity | 12 months · free non-proctored renewal |
+
+???
+All from the official Exam Guide v1.0, effective July 2026. Exam code CCDV-F.
+
+Eligibility: registration needs a Claude Partner Network organization email. Say this up front; not everyone in the room can sit the exam today. The material is still the best map of what Anthropic thinks a Claude developer should know.
+
+Retakes: 14 days, then 30, then 90. Max 4 attempts in 12 months. Each attempt pays the fee. Higher partner tiers get 50% off.
+
+Cancellation: the guide says 24 hours; the FAQ and Policies pages say 48. Use 48.
+
+---
+
+class: dense
+
+# Eight domains, 25 weighted skills
+
+| # | Domain | Weight | ~Items of 53 |
+|---|---|---|---|
+| D2 | **Applications and Integration** | **33.1%** | ~18 |
+| D5 | Model Selection and Optimization | 16.8% | ~9 |
+| D1 | Agents and Workflows | 14.7% | ~8 |
+| D6 | Prompt and Context Engineering | 11.0% | ~6 |
+| D8 | Tools and MCPs | 10.6% | ~6 |
+| D7 | Security and Safety | 8.1% | ~4 |
+| D3 | Claude Code | 3.1% | ~2 |
+| D4 | Eval, Testing, and Debugging | 2.6% | ~1 |
+
+???
+Item counts are weight × 53, rounded. The guide doesn't say how many items are unscored.
+
+Top four domains are 75.6% of the exam. Claude Code and Evals together are under 6%.
+
+---
+
+# Three things the weights hide
+
+.takeaways[
+<ol>
+<li><span class="num">1</span><div class="body"><strong>~20% is plain software engineering.</strong><span>Requirements, life cycle, REST/JSON/async, version control, SDKs, websockets. No Claude feature named.</span></div></li>
+<li><span class="num">2</span><div class="body"><strong>Claude Code leaks out of D3.</strong><span>CLAUDE.md and settings.json sit in D2. Hooks sit in D1 and D7. Skills sit in D8.</span></div></li>
+<li><span class="num">3</span><div class="body"><strong>D5 is mostly fundamentals.</strong><span>Tokens, sampling, thinking, effort, SDK plumbing. Pure "Opus vs Sonnet vs Haiku" is only 2.7%.</span></div></li>
+</ol>
+]
+
+???
+Skills 2.1, 2.2, 2.4, 5.2 = 19.7%, about ten items with no Claude feature in the skill text.
+
+The biggest single skill is 2.5 Claude Application Design (8.6%): how Claude reads instructions across Claude Code, Desktop, claude.ai, API and SDKs, content boundaries, schema design, session hygiene, plugins.
+
+---
+
+# How an item is built
+
+.two-col[
+<div>
+<div class="col-head">THE STEM</div>
+<ul>
+<li>2–3 sentence scenario</li>
+<li>One <strong>deciding constraint</strong>, stated plainly: "cost is the primary concern", "hidden text", "reusable across several apps"</li>
+<li>"Which approach <strong>best</strong> fits?"</li>
+</ul>
+</div>
+<div>
+<div class="col-head green">THE RIGHT ANSWER</div>
+<ul>
+<li>Names the <strong>purpose-built mechanism</strong>: Batches API, input isolation + guardrails, an MCP server</li>
+<li>Enforces in code, not in prose</li>
+<li>Smallest change that meets the constraint</li>
+</ul>
+</div>
+]
+
+*Underline the constraint before you read the options.*
+
+???
+All three official samples share this shape. All three answers happen to be B; don't read a pattern into letters.
+
+---
+
+# Five distractor patterns
+
+| Pattern | Sounds like |
+|---|---|
+| **Swap the model** | "Switch to a larger / the smallest model" |
+| **Prompt as policy** | "Add a line to the system prompt asking…" |
+| **Misses the constraint** | Faster when the stem said cheaper; temperature for a security problem |
+| **Stuff the context** | "Paste the data into every request" |
+| **Overclaims a feature** | "Built-in tools can reach any internal API" |
+
+???
+Every wrong option in the three official samples fits one of these. Name the pattern and you eliminate the option in seconds.
+
+---
+
+class: question
+
+.q-label[Warm-up poll · Blueprint]
+
+.stem[You have two weeks and can study deeply for only two domains. Which pair covers the most exam weight?]
+
+.options[
+- **A.** Claude Code + Eval, Testing, and Debugging
+- **B.** Agents and Workflows + Tools and MCPs
+- **C.** Applications and Integration + Model Selection and Optimization
+- **D.** Prompt and Context Engineering + Security and Safety
+]
+
+---
+
+class: answer
+
+.q-label[Warm-up · Answer]
+
+.correct[C · Applications and Integration + Model Selection ≈ 50%]
+
+| Option | Weight |
+|---|---|
+| A | 3.1 + 2.6 = **5.7%** |
+| B | 14.7 + 10.6 = **25.3%** |
+| C | 33.1 + 16.8 = **49.9%** |
+| D | 11.0 + 8.1 = **19.1%** |
+
+*Half the exam is API mechanics, app design, and model fundamentals.*
+
+???
+People overweight agents and Claude Code because they're the exciting part. The blueprint rewards the plumbing.
+
+---
+
+class: title, divider
+
+.session-label[SEGMENT 2 · 0:15 → 0:55 · 40 MIN]
+
+# API mechanics, application design, and model choice
+
+.chips[
+.chip[D2 Applications and Integration · **33.1%**]
+.chip[D5 Model Selection and Optimization · **16.8%**]
+]
+
+.footer[Half the exam<span>Practice: Q1–Q4 + official sample 1</span>]
+
+---
+
+.eyebrow-label[D2 + D5 · the skills behind half the exam]
+
+# What the exam asks
+
+.objectives[
+- **2.3 Claude API Mechanics (6.8%)**: messages, tools, streaming, vision, thinking, caching, third-party vendors, batch vs realtime
+- **2.4 Software Engineering Foundations (7.4%)**: REST, JSON, async, version control, SDLC, code review, refactoring
+- **2.5 Claude Application Design (8.6%)**: instructions across interfaces, content boundaries, schema design, session hygiene, plugins
+- **2.6 Configuration Management (4.1%)**: CLAUDE.md, settings.json, model version pinning, prompt versioning
+- **5.1–5.4**: LLM fundamentals, SDK/REST/websockets, Opus vs Sonnet vs Haiku, token budgeting + caching
+]
+
+.source-line[Skill names and weights from the CCDV-F Exam Guide v1.0, Section 6]
+
+???
+2.1 Understanding Requirements (3.4%) and 2.2 Systems Life Cycle (2.8%) are generic. Read them as "can you turn a business ask into functional and infra requirements" and "do you know dev → deploy → operate → maintain".
+
+---
+
+# One endpoint: `POST /v1/messages`
+
+.two-col[
+<div>
+<div class="col-head">REQUEST</div>
+<ul>
+<li><code>model</code>, <code>max_tokens</code></li>
+<li><code>system</code>: the behavioral contract</li>
+<li><code>messages</code>: alternating user/assistant turns of <strong>content blocks</strong></li>
+<li><code>tools</code>, <code>tool_choice</code></li>
+<li><code>output_config</code>: <code>effort</code>, <code>format</code></li>
+<li><code>thinking</code>, <code>cache_control</code></li>
+</ul>
+</div>
+<div>
+<div class="col-head blue">RESPONSE</div>
+<ul>
+<li><code>content</code>: text, tool_use, thinking blocks</li>
+<li><code>stop_reason</code>: why it stopped</li>
+<li><code>usage</code>: input, output, <code>cache_creation_input_tokens</code>, <code>cache_read_input_tokens</code></li>
+</ul>
+</div>
+]
+
+*Stateless: you resend the whole conversation every call.*
+
+???
+Tools, structured output, thinking, caching are all features of this one endpoint, not separate APIs. Batches, Files, count_tokens, Models are supporting endpoints.
+
+The SDKs are a thin layer over REST: auth, retries (2 by default on 408/409/429/5xx), typed errors, streaming helpers.
+
+---
+
+class: dense
+
+# Read `stop_reason` before you read `content`
+
+| stop_reason | Meaning | Your code |
+|---|---|---|
+| `end_turn` | Finished naturally | Use the answer |
+| `tool_use` | Wants a tool | Run it, return `tool_result`, loop |
+| `max_tokens` | Hit your cap mid-output | Don't parse; raise cap or continue |
+| `stop_sequence` | Hit a custom stop string | Expected cut |
+| `pause_turn` | Long server-tool turn paused | Send back to continue |
+| `refusal` | Safety classifier declined | Handle; check `stop_details` |
+| `model_context_window_exceeded` | Window filled mid-generation | Trim / compact history |
+
+???
+An input that's already too large fails with a validation error before generation. A request that fits but fills the window during generation returns what it has with model_context_window_exceeded. Neither silently drops old turns: managing history is the app's job.
+
+---
+
+class: question
+
+.q-label[Q1 · D2 API Mechanics]
+
+.stem[An extraction service asks Claude for JSON. About 3% of responses fail to parse. Every failed response has `stop_reason: "max_tokens"`. What is the best fix?]
+
+.options[
+- **A.** Add "Always return complete, valid JSON" to the system prompt.
+- **B.** Check `stop_reason` before parsing and raise `max_tokens` for this route so long extractions can finish.
+- **C.** Switch to a larger model that writes JSON more reliably.
+- **D.** Lower the temperature to make output more deterministic.
+]
+
+---
+
+class: answer
+
+.q-label[Q1 · Answer]
+
+.correct[B · Check stop_reason, raise the cap]
+
+| Option | Pattern | Why it fails |
+|---|---|---|
+| A | Prompt as policy | The model was cut off; it can't finish what the cap stopped |
+| C | Swap the model | Same cap, same truncation |
+| D | Misses the constraint | Temperature doesn't change length (and newest models reject it) |
+
+*The trace already told you the cause. Read `stop_reason`.*
+
+???
+Structured outputs guarantee the schema, not completion. A max_tokens truncation still returns broken JSON. Always branch on stop_reason first.
+
+---
+
+# Four request shapes
+
+| Shape | Use when | Watch for |
+|---|---|---|
+| **Synchronous** | Short calls, backend jobs | Timeouts on long outputs |
+| **Streaming (SSE)** | A user is watching; long or large outputs | Assemble per block; handle drops |
+| **Async client** | Concurrency without blocking your app | Still realtime; still rate-limited |
+| **Message Batches** | Bulk, offline, nobody waiting | Up to 24 h; **50% off**; results out of order |
+
+*Is a user waiting? Then realtime. Is it bulk and can it wait? Then batch.*
+
+???
+Python has AsyncAnthropic; the TS client is already Promise-based.
+
+Batches: up to 100,000 requests or 256 MB per batch. Submit a list with custom_id per request, poll processing_status until "ended", stream results, key by custom_id, never by position. Result types: succeeded, errored, canceled, expired.
+
+---
+
+# Streaming without corrupting state
+
+- Events: `message_start` → `content_block_start` → `content_block_delta`… → `content_block_stop` → `message_delta` (**stop_reason, usage**) → `message_stop`
+- Accumulate **per content-block index**; tool inputs arrive as partial JSON
+- Act only on **complete** blocks; never execute a half-streamed tool call
+- On a dropped stream: treat what you have as partial, then retry or resume; don't commit it
+- SDK helpers: `get_final_message()` / `finalMessage()`
+
+???
+Stop reason and final usage arrive in message_delta near the end. Code that writes to a database on every delta, or runs a tool when content_block_start arrives, corrupts state when the stream drops.
+
+Streaming is also the fix for HTTP timeouts on large max_tokens.
+
+---
+
+class: question
+
+.q-label[Official sample 1 · D2 · Exam Guide, Section 8]
+
+.stem[A developer must process 10,000 documents overnight to produce a non-urgent analytics report. Cost is the primary concern, and results are not needed until the following morning. Which approach best fits the requirement?]
+
+.options[
+- **A.** Send every request synchronously through the Messages API in parallel to finish as quickly as possible.
+- **B.** Use the Message Batches API, which processes large asynchronous workloads within a 24-hour window at reduced cost.
+- **C.** Lower max_tokens on synchronous calls to minimize cost.
+- **D.** Switch to the smallest available model regardless of output quality.
+]
+
+???
+Ask the room to vote before the reveal. Constraint: "cost is the primary concern" + "not needed until the following morning".
+
+---
+
+class: answer
+
+.q-label[Official sample 1 · Answer]
+
+.correct[B · Message Batches API]
+
+| Option | Pattern | Why it fails |
+|---|---|---|
+| A | Misses the constraint | Optimizes speed; per-token cost unchanged |
+| C | Misses the constraint | Truncates output; doesn't touch batch vs realtime |
+| D | Swap the model | "Regardless of quality" breaks the report |
+
+*Latency-tolerant + high volume + cost = Batches.*
+
+???
+Guide rationale: the Batches API is designed for latency-tolerant, high-volume workloads at lower cost.
+
+---
+
+class: dense
+
+# Prompt caching: pay once for the stable prefix
+
+| Fact | Value |
+|---|---|
+| Match | Exact **prefix**, in order `tools → system → messages` |
+| Marker | `cache_control: {type: "ephemeral"}` · max **4** breakpoints |
+| TTL | **5 min** default · `"ttl": "1h"` option · reads refresh the timer |
+| Price | Write **1.25×** (5 min) / **2×** (1 h) · read **~0.1×** base input |
+| Minimum | Model-dependent prefix length; shorter silently won't cache |
+| Verify | `usage.cache_read_input_tokens` > 0 on repeat calls |
+
+*Stable content first, volatile content after the last breakpoint.*
+
+???
+"Cache check-pointing" in the blueprint = where you place breakpoints. One on the last system block caches tools + system. For multi-turn, a breakpoint on the latest turn lets each request reuse the prior conversation.
+
+Silent invalidators: a timestamp or request ID in the system prompt, unsorted JSON, a tool list that changes order, switching model (caches are model-scoped).
+
+Break-even: 5-min TTL pays off at the second request.
+
+---
+
+class: question
+
+.q-label[Q2 · D5 Cost and Token Management]
+
+.stem[A support assistant sends a 25,000-token system prompt and an identical tool list on every request, with a `cache_control` breakpoint on the last system block. `cache_read_input_tokens` is always 0. The system prompt begins with `Current time: {now}`. What should the developer do?]
+
+.options[
+- **A.** Switch to the 1-hour cache TTL so entries live longer.
+- **B.** Add more breakpoints throughout the system prompt.
+- **C.** Move the timestamp out of the system prompt to after the last breakpoint, such as into the user turn.
+- **D.** Move the workload to the Message Batches API.
+]
+
+---
+
+class: answer
+
+.q-label[Q2 · Answer]
+
+.correct[C · Move the volatile timestamp after the breakpoint]
+
+| Option | Pattern | Why it fails |
+|---|---|---|
+| A | Misses the constraint | Longer TTL on a prefix that changes every call still never hits |
+| B | Overclaims a feature | Every breakpoint sits after the changing first line |
+| D | Misses the constraint | Interactive support can't wait 24 h |
+
+*A byte change at position N invalidates everything after N.*
+
+???
+Diagnose a zero hit rate by hunting what changes per request: timestamps, IDs, unsorted JSON, tool order.
+
+---
+
+# Structured output: enforce, then still check
+
+.two-col[
+<div>
+<div class="col-head">ENFORCE THE SHAPE</div>
+<ul>
+<li><code>output_config.format</code> with a <code>json_schema</code>: the response <strong>is</strong> valid JSON</li>
+<li><code>strict: true</code> on a tool: tool <strong>inputs</strong> match the schema</li>
+<li>Prefill is gone on current models (400)</li>
+</ul>
+</div>
+<div>
+<div class="col-head amber">STILL CHECK</div>
+<ul>
+<li><code>stop_reason</code> <code>refusal</code> or <code>max_tokens</code> → no valid object</li>
+<li>Schema-valid ≠ correct: validate values and ranges</li>
+<li>Parse with <code>json.loads</code>, never string matching</li>
+<li>First call on a new schema is slower (grammar compile, cached 24 h)</li>
+</ul>
+</div>
+]
+
+???
+Skill 6.3 Output Handling: structured outputs, response validation, defensive parsing, "skepticism toward confident output". A confident wrong number is still wrong; verify against ground truth where it matters.
+
+---
+
+# Vision, PDFs, Files, third-party clouds
+
+.two-col[
+<div>
+<div class="col-head">INPUTS</div>
+<ul>
+<li><code>image</code> and <code>document</code> blocks, placed <strong>before</strong> the text question</li>
+<li>Files API: upload once, reference by <code>file_id</code></li>
+<li>PDF: page images + text; citations optional</li>
+</ul>
+</div>
+<div>
+<div class="col-head blue">BEDROCK · VERTEX · FOUNDRY</div>
+<ul>
+<li>Same Messages API shape, <strong>platform client</strong> and platform auth (IAM, ADC)</li>
+<li>Different model IDs and pricing</li>
+<li>Newest betas may land on the Claude API first: check availability</li>
+</ul>
+</div>
+]
+
+???
+Exam angle on third-party access: data residency, existing cloud commitments, IAM integration are reasons to use Bedrock or Vertex. The trap is assuming every beta or feature exists on every platform at the same time.
+
+Bedrock: AnthropicBedrockMantle, model IDs with an anthropic. prefix, region required. Vertex: project + region, no Anthropic API key, gcloud ADC.
+
+---
+
+class: dense
+
+# Application design + configuration management
+
+| Concern | The exam's answer |
+|---|---|
+| Instructions across surfaces | API: **you** own the system prompt. claude.ai / Desktop: product prompt + projects. Claude Code: CLAUDE.md + settings |
+| Content boundaries | Instructions in `system`; data in tagged blocks; untrusted input never promoted to instructions |
+| Session hygiene | Fresh context per task; don't carry stale history across unrelated jobs |
+| Model version pinning | Pin an exact model ID in prod; run evals before you move |
+| Prompt versioning | Prompts live in git next to their evals; change one, rerun the other |
+| Plugins | Bundle commands, skills, agents, hooks, MCP; declare dependencies |
+
+???
+2.5 is the biggest single skill (8.6%). Expect items where the same instruction behaves differently in Claude Code vs the API because of what each surface injects.
+
+"Breaking behavior changes across model releases" (5.3): e.g. sampling parameters, budget_tokens, prefill and forced tool_choice were removed on the newest models. A pinned ID plus an eval suite is how you migrate safely.
+
+---
+
+class: dense
+
+# Model choice and reasoning are separate levers
+
+| Tier | Role | Default move |
+|---|---|---|
+| **Fable** | Most capable: hardest reasoning, long agentic work | Only when evals demand it |
+| **Opus** | Demanding work above Sonnet | Step up on eval evidence |
+| **Sonnet** | Balanced default for production | **Start here** |
+| **Haiku** | Fast, cheap, high volume | Step down when evals say quality holds |
+
+- **Adaptive thinking** + `effort` (low → max) per request · `budget_tokens` is deprecated (400 on newest models)
+- Thinking tokens bill as **output** · display is omitted by default; request a summary
+- **Fast mode**: same Opus, faster output, premium price
+- Sampling params (`temperature`, `top_p`) rejected on the newest models
+
+???
+From the official prep lesson: start with Sonnet, move up a tier only when an eval shows a miss, move down to Haiku only when an eval shows the drop is acceptable.
+
+Leave thinking low or off for classification, extraction, format conversion. Turn it up for multi-step reasoning and agent planning.
+
+Non-determinism: even temperature 0 never guaranteed identical outputs. Test properties, not exact text.
+
+Current lineup: Fable 5.1, Opus 5.5, Sonnet 5.5, Haiku 5.5. The exam tests reasoning, not version numbers.
+
+---
+
+class: question
+
+.q-label[Q3 · D5 Model Selection]
+
+.stem[A latency-sensitive classifier labels incoming tickets into four categories. It runs on an Opus-tier model at high effort. An eval on 500 labeled tickets shows a Haiku-tier model at low effort meets the same accuracy bar. What should the team do?]
+
+.options[
+- **A.** Keep the Opus model and enable fast mode to cut latency.
+- **B.** Move the route to the Haiku model at low effort, keeping the eval as a regression gate.
+- **C.** Keep the Opus model and turn thinking up for even higher accuracy.
+- **D.** Move the classifier to the Message Batches API to cut cost.
+]
+
+---
+
+class: answer
+
+.q-label[Q3 · Answer]
+
+.correct[B · Smallest model that passes the eval]
+
+| Option | Pattern | Why it fails |
+|---|---|---|
+| A | Misses the constraint | Faster, but pays a premium for capability the task doesn't need |
+| C | Misses the constraint | More thinking, more latency and cost, no accuracy gain needed |
+| D | Misses the constraint | "Latency-sensitive" rules out a 24-hour window |
+
+*Evals move you up or down a tier. Nothing else does.*
+
+---
+
+# Cost levers, cheapest first
+
+.takeaways[
+<ol>
+<li><span class="num">1</span><div class="body"><strong>Cache the stable prefix.</strong><span>Free win. Verify with cache_read_input_tokens.</span></div></li>
+<li><span class="num">2</span><div class="body"><strong>Batch what can wait.</strong><span>50% off for offline work.</span></div></li>
+<li><span class="num">3</span><div class="body"><strong>Trim input.</strong><span>Prune tool output, fewer examples, only the MCP servers you use.</span></div></li>
+<li><span class="num">4</span><div class="body"><strong>Tune effort, then model tier.</strong><span>Per route, on eval evidence.</span></div></li>
+<li><span class="num">5</span><div class="body"><strong>Track usage per task.</strong><span>Input, output, cache write, cache read. Cost per completed task, not per call.</span></div></li>
+</ol>
+]
+
+???
+Token counting: POST /v1/messages/count_tokens before you send. Usage fields on every response. A cheaper call that needs three retries isn't cheaper.
+
+---
+
+class: question
+
+.q-label[Q4 · D5 Cost · Select TWO]
+
+.stem[An internal assistant's bill doubled. 80% of input tokens on every call are an identical 20,000-token block of instructions and tool definitions. A nightly job re-scores the day's 40,000 conversations synchronously. Which TWO changes reduce cost without lowering quality? **(Select two.)**]
+
+.options[
+- **A.** Add a cache breakpoint after the stable instructions and tool definitions.
+- **B.** Move the nightly re-scoring job to the Message Batches API.
+- **C.** Paste the full knowledge base into each request so the model needs fewer turns.
+- **D.** Switch every route to the most capable model to reduce retries.
+- **E.** Raise `max_tokens` on all calls.
+]
+
+---
+
+class: answer
+
+.q-label[Q4 · Answer]
+
+.correct[A + B · Cache the prefix, batch the nightly job]
+
+| Option | Pattern | Why it fails |
+|---|---|---|
+| C | Stuff the context | Multiplies input tokens on every call |
+| D | Swap the model | Higher per-token price everywhere, no evidence |
+| E | Misses the constraint | A cap, not a cost lever |
+
+*Multiple-response items: the stem tells you how many. Pick exactly that many.*
+
+???
+Multiple response scoring: assume no partial credit. Each option is a true/false judgment against the constraint.
+
+---
+
+class: center, middle, cue
+
+.eyebrow-label[Segment 2 complete]
+
+# Break · 5 min
+
+???
+Back at 1:00. Next: agents, tools, MCP.
+
+---
+
+class: title, divider
+
+.session-label[SEGMENT 3 · 0:55 → 1:25 · 30 MIN]
+
+# Agents, tools, and MCP
+
+.chips[
+.chip[D1 Agents and Workflows · **14.7%**]
+.chip[D8 Tools and MCPs · **10.6%**]
+]
+
+.footer[A quarter of the exam<span>Practice: Q5–Q8 + official sample 3</span>]
+
+---
+
+# Workflow or agent?
+
+.two-col[
+<div>
+<div class="col-head">WORKFLOW</div>
+<ul>
+<li>Your code owns the steps</li>
+<li>Prompt chaining, routing, parallelization, evaluator-optimizer</li>
+<li>Predictable cost and latency</li>
+</ul>
+</div>
+<div>
+<div class="col-head green">AGENT</div>
+<ul>
+<li>The model picks the next step in a loop</li>
+<li>Only when <strong>all four</strong> hold: complex, valuable, viable for Claude, errors recoverable</li>
+<li>Supervisor + subagents for parallel or isolated work</li>
+</ul>
+</div>
+]
+
+*If you can draw the flowchart in advance, it's a workflow.*
+
+???
+Orchestrator-workers costs roughly 15× the tokens of a chat. It's a poor fit for tightly coupled work like a single coding change.
+
+Skill 1.1: decision criteria, manager/supervisor hierarchies, subagents. Subagents improve execution by isolating context: each starts fresh, does one job, returns a condensed result. Anything they need (constraints, format) must be passed explicitly.
+
+---
+
+# The tool-use loop: Claude asks, your code runs
+
+```
+while True:
+    resp = client.messages.create(model=MODEL, max_tokens=4096,
+                                  tools=tools, messages=messages)
+    messages.append({"role": "assistant", "content": resp.content})  # keep ALL blocks
+    if resp.stop_reason != "tool_use":
+        break
+    results = [{"type": "tool_result", "tool_use_id": b.id,
+                "content": run(b.name, b.input)}           # is_error=True on failure
+               for b in resp.content if b.type == "tool_use"]
+    messages.append({"role": "user", "content": results})  # ONE user turn, all results
+```
+
+- Every `tool_use` id answered by a matching `tool_result` in the **next** user turn
+- Thinking blocks go back **unchanged**; never strip them mid-loop
+
+???
+Claude never executes tools. It emits tool_use; your code runs it and returns tool_result. Mismatched or missing IDs fail validation: that's a code bug, not a prompt problem.
+
+Return all parallel results in one user message. Splitting them teaches the model to stop calling tools in parallel.
+
+The SDK Tool Runner automates this exact loop for tools you define.
+
+---
+
+class: question
+
+.q-label[Q5 · D8 Tool Implementation]
+
+.stem[An agent calls `get_order_status`. The downstream service times out. What should the developer's code send back to Claude?]
+
+.options[
+- **A.** Nothing; remove the `tool_use` block from history and retry the whole request.
+- **B.** A `tool_result` with an empty string so the loop continues.
+- **C.** A `tool_result` for that `tool_use_id` with `is_error: true` and a short message such as "Order service timed out; retry or ask the user."
+- **D.** A new user message telling Claude the tool is broken and to stop using tools.
+]
+
+---
+
+class: answer
+
+.q-label[Q5 · Answer]
+
+.correct[C · tool_result with is_error: true]
+
+| Option | Pattern | Why it fails |
+|---|---|---|
+| A | Breaks the protocol | Editing history drops context and can invalidate thinking blocks |
+| B | Masks failure | Claude reads "empty" as a real answer and may invent one |
+| D | Prompt as policy | Unpaired tool_use fails validation; overreacts to one failure |
+
+*Errors are information. Give the model a recoverable signal.*
+
+---
+
+class: dense
+
+# Tool definitions Claude selects correctly
+
+| Part | Do |
+|---|---|
+| `name` | Specific: `get_account_balance`, not `get_data` |
+| `description` | 3–4 sentences: what it does, **when to use, when not to**, what it returns |
+| `input_schema` | `required` only for truly required fields, or Claude invents values |
+| `strict: true` | Guarantees inputs match the schema |
+| Overlap | Exclusion conditions on **both** tools, or merge into one tool with a type parameter |
+| `tool_choice` | `auto` (default) · `none` · forced `any`/`tool` returns 400 on newest models |
+| Parallel | Default on; `disable_parallel_tool_use` for one call per turn |
+
+???
+Wrong-tool selection is almost always a description problem. Two tools that both "find information" look identical to the model.
+
+Client tools (you run them) vs server tools (Anthropic runs them: web_search, web_fetch, code_execution). Approval patterns: gate risky tools behind human confirmation in your harness.
+
+---
+
+class: dense
+
+# Four ways to build an agent
+
+| Approach | You write | Who hosts |
+|---|---|---|
+| **Manual loop** (Messages API) | The whole loop + every tool | You |
+| **Tool Runner** (SDK helper) | Just the tool functions | You |
+| **Claude Agent SDK** | A prompt + options; get Claude Code's harness, built-in tools, hooks, subagents | You |
+| **Managed Agents** | Agent config; Anthropic runs loop + sandbox | Anthropic |
+
+*Frameworks (Strands, LangGraph, PydanticAI) wrap the same loop.*
+
+???
+Skill 1.2: Agent SDK, custom loops and harnesses, self-hosted vs Anthropic-hosted, hooks for deterministic actions. Skill 1.3 names Strands, LangGraph, PydanticAI as abstraction frameworks. The exam won't test their APIs; it tests when an abstraction helps.
+
+---
+
+class: question
+
+.q-label[Q6 · D1 Agent Construction]
+
+.stem[A team wants a coding agent that reads and edits files, runs shell commands, delegates to subagents, and blocks dangerous commands with hooks. Compliance requires it to run inside the team's own VPC. Which approach best fits?]
+
+.options[
+- **A.** The Claude Agent SDK, deployed on the team's infrastructure.
+- **B.** Managed Agents, so Anthropic hosts the loop and the sandbox.
+- **C.** A hand-written Messages API loop with file, shell, and subagent tools built from scratch.
+- **D.** The Message Batches API with one request per coding task.
+]
+
+---
+
+class: answer
+
+.q-label[Q6 · Answer]
+
+.correct[A · Claude Agent SDK, self-hosted]
+
+| Option | Pattern | Why it fails |
+|---|---|---|
+| B | Misses the constraint | Anthropic-hosted sandbox, not their VPC |
+| C | Over-engineering | Rebuilds what the SDK already ships |
+| D | Misses the constraint | Batches has no interactive tool loop |
+
+*Harness vs deployment: the SDK gives the harness, you keep the deployment.*
+
+---
+
+class: dense
+
+# Built-in tool, custom tool, Skill, or MCP?
+
+| Choose | When | Cue in the stem |
+|---|---|---|
+| **Built-in tool** | Anthropic already ships it (web search, code execution, Read/Edit/Bash) | "Search the web", "run code" |
+| **Custom tool** | One app needs one action on your system | "This app needs to call…" |
+| **Skill** | Packaged know-how: instructions + scripts, loaded on demand | "Teach it our procedure / format" |
+| **MCP server** | Reusable connection to a system, shared across apps and clients | "Reusable", "several apps", "maintained independently" |
+
+Also: **CLAUDE.md** = always-on project context · **Hook** = must-happen deterministic action · **Subagent** = isolated context
+
+???
+Skill 8.3, 4.1% of the exam. A Skill teaches how; an MCP server connects to what. Skills use progressive disclosure: only the name and description sit in context until needed.
+
+---
+
+class: question
+
+.q-label[Official sample 3 · D8 · Exam Guide, Section 8]
+
+.stem[A team needs Claude to call an internal inventory service exposed as a REST API. They want the capability to be reusable across several Claude applications and maintained independently of any one app. Which approach best fits?]
+
+.options[
+- **A.** Hard-code the inventory logic into each application's system prompt.
+- **B.** Build an MCP server that exposes the inventory operations as tools so multiple Claude applications can connect to it.
+- **C.** Paste the current inventory data into the context window on every request.
+- **D.** Rely on a built-in tool, since built-in tools can reach any internal REST API.
+]
+
+---
+
+class: answer
+
+.q-label[Official sample 3 · Answer]
+
+.correct[B · An MCP server]
+
+| Option | Pattern | Why it fails |
+|---|---|---|
+| A | Prompt as policy | Neither reusable nor maintainable |
+| C | Stuff the context | No live access; wastes context |
+| D | Overclaims a feature | Built-in tools don't reach arbitrary internal APIs |
+
+???
+Guide rationale: an MCP server exposes reusable tools that multiple apps share and that can be maintained independently.
+
+---
+
+# MCP in one slide
+
+.two-col[
+<div>
+<div class="col-head">PRIMITIVES</div>
+<ul>
+<li><strong>Tools</strong>: actions the model calls</li>
+<li><strong>Resources</strong>: data the app attaches</li>
+<li><strong>Prompts</strong>: templates the user picks</li>
+<li>Host → client → server; same tool loop as before</li>
+</ul>
+</div>
+<div>
+<div class="col-head blue">TRANSPORTS</div>
+<ul>
+<li><strong>stdio</strong>: local subprocess</li>
+<li><strong>Streamable HTTP</strong>: remote; old SSE-only is deprecated</li>
+<li>API MCP connector: <strong>remote servers only</strong></li>
+<li>Tool definitions cost context even unused</li>
+</ul>
+</div>
+]
+
+???
+Skill 8.2: author, deploy, integrate servers; resources, tools, prompts; stdio vs sockets; client vs server.
+
+API connector: mcp_servers entry plus an mcp_toolset in tools, beta header mcp-client-2025-11-20. Allowlist tools, defer_loading to cut context cost. Test servers with the MCP Inspector. Local stdio servers need your own client (SDK), Claude Code, or Claude Desktop.
+
+---
+
+class: question
+
+.q-label[Q7 · D8 MCP Server Development]
+
+.stem[A developer built an MCP server that runs locally over stdio. It works in Claude Code. They now want a backend service to use it through the Claude API's MCP connector, and the connection fails. What is the cause and fix?]
+
+.options[
+- **A.** The beta header is missing; adding it lets the connector launch the stdio server.
+- **B.** The connector only reaches remote servers; deploy the server over Streamable HTTP, or run your own MCP client via the SDK.
+- **C.** MCP servers can't serve API apps; rewrite the server as a Skill.
+- **D.** The tool descriptions are too long; shorten them so the connector accepts the server.
+]
+
+---
+
+class: answer
+
+.q-label[Q7 · Answer]
+
+.correct[B · Connector = remote HTTP servers only]
+
+| Option | Pattern | Why it fails |
+|---|---|---|
+| A | Overclaims a feature | The header enables the connector; it can't spawn local processes |
+| C | Misses the constraint | Skills teach procedures; they don't expose a live system |
+| D | Misses the constraint | Description length doesn't affect transport |
+
+---
+
+# Subagents, hooks, and humans
+
+| Tool | What it does | Use for |
+|---|---|---|
+| **Subagents** | Fresh context per side task; returns a condensed result | Parallel or noisy work. Pass constraints explicitly: they don't inherit your conversation |
+| **Hooks** | Deterministic code on lifecycle events; `PreToolUse` can **block** a call | Must-happen and must-never-happen rules |
+| **Human-in-the-loop** | Approval checkpoint in your harness | **Irreversible** actions: payments, deletes, sends, deploys |
+
+*Memory across sessions lives in storage you control, not in an ever-growing context.*
+
+???
+PreToolUse blocks by exiting with code 2 (stderr goes back to Claude) or returning a deny decision. PostToolUse can't block; use it for audit logs.
+
+Hooks show up in three skills: 1.2 (deterministic actions), 7.3 (guardrails against destructive actions), and Claude Code. Memory: memory tool or an external store, scoped per user / project / task; load what's needed instead of replaying everything.
+
+---
+
+class: question
+
+.q-label[Q8 · D7 Claude Hooks]
+
+.stem[A Claude Code agent must never run `git push --force` or delete files outside the repo, even if a prompt or a fetched web page tells it to. Which control is most reliable?]
+
+.options[
+- **A.** A bold rule in CLAUDE.md: "NEVER force-push or delete files outside the repo."
+- **B.** A `PreToolUse` hook that inspects Bash commands and blocks those patterns, plus permission deny rules.
+- **C.** A `PostToolUse` hook that logs every command for weekly review.
+- **D.** Switch to a more capable model that follows CLAUDE.md more closely.
+]
+
+---
+
+class: answer
+
+.q-label[Q8 · Answer]
+
+.correct[B · PreToolUse hook + deny rules]
+
+| Option | Pattern | Why it fails |
+|---|---|---|
+| A | Prompt as policy | A request, not enforcement; injection can override it |
+| C | Watch, don't block | Records the damage after it happens |
+| D | Swap the model | Model choice doesn't enforce anything |
+
+*Prompts ask. Hooks and permissions enforce.*
+
+---
+
+class: center, middle, cue
+
+.eyebrow-label[Segment 3 complete]
+
+# Q&A
+
+???
+Two minutes.
+
+---
+
+class: title, divider
+
+.session-label[SEGMENT 4 · 1:25 → 1:50 · 25 MIN]
+
+# Prompting, context, security, and the small domains
+
+.chips[
+.chip[D6 Prompt + Context · **11.0%**]
+.chip[D7 Security · **8.1%**]
+.chip[D3 Claude Code · **3.1%**]
+.chip[D4 Debugging · **2.6%**]
+]
+
+.footer[A quarter of the exam<span>Practice: Q9–Q13 + official sample 2</span>]
+
+---
+
+# Diagnose, then add one structural fix
+
+| What you see | What the prompt is missing |
+|---|---|
+| Wrong shape: prose instead of a label or JSON | **Output constraint** (or structured outputs) |
+| Scope or tone drifts deeper into the session | A more specific **system prompt** |
+| Right task, invented structure | **Few-shot examples** in tags |
+| Fine on tested inputs, breaks on a variant | A constraint or example **for that variant** |
+
+*A prompt that grows longer every pass means you skipped the diagnosis.*
+
+???
+From the official prep path: rewording doesn't add the missing structural piece. Three failed re-prompts in a row → stop adding text and diagnose.
+
+Placement: role, rules, and format in system; data in the user turn wrapped in descriptive XML tags (<contract>, <ticket>); long documents first, question last. Input sanitization for anything user-supplied.
+
+---
+
+class: question
+
+.q-label[Q9 · D6 Prompt Engineering]
+
+.stem[A ticket router expects exactly `BILLING`, `TECHNICAL`, or `ESCALATION`. Claude returns "Billing", "billing", and sometimes "This looks like a billing issue." The developer has already added three paragraphs describing each category. What is the best next step?]
+
+.options[
+- **A.** Add two more paragraphs of category descriptions and edge cases.
+- **B.** Turn on extended thinking at high effort.
+- **C.** Constrain the output to exactly one label from the fixed set (or a JSON schema), with two tagged examples showing the format.
+- **D.** Switch to a larger model.
+]
+
+---
+
+class: answer
+
+.q-label[Q9 · Answer]
+
+.correct[C · Output constraint + few-shot format examples]
+
+| Option | Pattern | Why it fails |
+|---|---|---|
+| A | More words, no structure | Longer prompts drift toward longer, looser outputs |
+| B | Misses the constraint | Reasoning isn't the problem; the shape is |
+| D | Swap the model | Same missing constraint, higher bill |
+
+---
+
+class: dense
+
+# Context engineering: the window is a budget
+
+| Problem | Lever |
+|---|---|
+| Old tool output piling up | **Prune / clear** stale tool results (context editing) |
+| Long session nearing the limit | **Compaction**: summarize earlier turns; keep compaction blocks |
+| Side task floods the main thread | **Subagent** with its own window, returns a summary |
+| State must survive sessions | **Memory** in external storage, loaded on demand |
+| Unrelated next task | **Clear history** and start fresh |
+| Many MCP servers attached | Connect only what you use; defer tool loading |
+
+*Never "save context" by stripping thinking blocks mid tool loop.*
+
+???
+Skill 6.1: context window management, drift and bloat (tool output pruning, compaction), isolation through subagents or multi-step workflows.
+
+Drift: constraints set early fade as the window fills with tool output. Keep durable rules in the system prompt, not buried in turn 3.
+
+---
+
+class: question
+
+.q-label[Q10 · D6 Context Engineering]
+
+.stem[A research agent works well for 30 minutes, then starts repeating searches and ignoring a scope constraint from the first user turn. About 70% of its context is raw search results. Which change best addresses the root cause?]
+
+.options[
+- **A.** Move to a model with a larger context window.
+- **B.** Clear stale tool results and compact history, put the scope rule in the system prompt, and run searches in subagents that return condensed findings.
+- **C.** Raise `max_tokens` so the agent can write longer plans.
+- **D.** Restart the agent every 30 minutes with an empty context.
+]
+
+---
+
+class: answer
+
+.q-label[Q10 · Answer]
+
+.correct[B · Prune, compact, isolate, and anchor the rule]
+
+| Option | Pattern | Why it fails |
+|---|---|---|
+| A | Swap the model | A bigger bucket fills with the same bloat |
+| C | Misses the constraint | Output cap isn't the problem |
+| D | Loses state | Throws away progress and the constraint with it |
+
+---
+
+# Security: treat every input as data, not orders
+
+- **Prompt injection** arrives in documents, web pages, emails, tool results
+- **Isolate** untrusted content in tagged blocks; never promote it to instructions
+- **Least privilege**: remove tools the task doesn't need before you guard them
+- **Layer guardrails**: input screening → output validation → tool permissions → hooks → human approval
+- **Data**: minimize PII, redact before sending, control retention, block exfiltration paths
+
+*A polite rule in the prompt is not a control.*
+
+???
+Skills 7.1 and 7.2. Mid-conversation operator instructions go in a role "system" message, the non-spoofable operator channel; text inside user or tool content can be forged.
+
+Jailbreak defense: same layering. Don't rely on the model alone; enforce in code what must never happen.
+
+---
+
+class: question
+
+.q-label[Official sample 2 · D7 · Exam Guide, Section 8]
+
+.stem[A Claude-powered agent summarizes web pages submitted by end users. One page contains hidden text instructing the model to ignore previous instructions and reveal its system prompt. Which mitigation is most effective?]
+
+.options[
+- **A.** Raise the model's temperature so its behavior is harder to predict.
+- **B.** Treat retrieved page content as untrusted input, keep it separate from trusted instructions, and use guardrails or hooks so injected instructions cannot trigger sensitive actions.
+- **C.** Add a line to the system prompt asking users not to include malicious instructions.
+- **D.** Switch to a larger model that follows instructions more reliably.
+]
+
+---
+
+class: answer
+
+.q-label[Official sample 2 · Answer]
+
+.correct[B · Isolate untrusted input + enforce guardrails]
+
+| Option | Pattern | Why it fails |
+|---|---|---|
+| A | Misses the constraint | Temperature is irrelevant to injection |
+| C | Prompt as policy | A polite request isn't enforceable |
+| D | Swap the model | A more obedient model can be **more** susceptible |
+
+???
+Guide rationale: isolate untrusted content from trusted instructions and enforce least-privilege guardrails so injected text cannot invoke sensitive tools.
+
+---
+
+# Secrets, keys, and identity
+
+- Keys live in a **secret manager or env vars**, never in prompts, CLAUDE.md, repos, or client-side code
+- **Backend proxy** between browsers/mobile apps and the API
+- **Separate keys per environment** and workspace; least-privilege scopes
+- **Rotate** on exposure; monitor usage per key
+- MCP servers and tools hold **their own** credentials server-side; the model never sees them
+- Prefer **workload identity** over long-lived static keys where available
+
+???
+Skill 7.4 (1.6%): secrets across dev and prod, identity validation, access approval and level verification, authorized access monitoring.
+
+Workload Identity Federation: SDK exchanges a cloud identity token for short-lived credentials. Managed Agents vaults inject credentials at egress so they never enter the sandbox.
+
+---
+
+class: question
+
+.q-label[Q11 · D7 Secrets and Key Management]
+
+.stem[A startup's React web app calls the Claude API directly from the browser with an API key in the JavaScript bundle. Usage spikes overnight from unknown IPs. What should they do?]
+
+.options[
+- **A.** Obfuscate the bundle so the key is harder to find.
+- **B.** Rotate the key now, move Claude calls behind a backend that holds the key in a secret manager, and monitor per-key usage.
+- **C.** Add a system prompt line telling Claude to refuse requests from unknown users.
+- **D.** Lower `max_tokens` to limit the cost of each abusive request.
+]
+
+---
+
+class: answer
+
+.q-label[Q11 · Answer]
+
+.correct[B · Rotate, proxy, store in a secret manager, monitor]
+
+| Option | Pattern | Why it fails |
+|---|---|---|
+| A | Security by obscurity | Anything shipped to the browser is public |
+| C | Prompt as policy | The model can't authenticate callers |
+| D | Misses the constraint | Caps damage per call; key is still stolen |
+
+---
+
+class: dense
+
+# Claude Code in one slide (D3 · 3.1%)
+
+| Piece | Where | Job |
+|---|---|---|
+| **CLAUDE.md** | Managed → `~/.claude/` → project root → subfolders | Always-on context; `/init` writes the first one |
+| **settings.json** | Managed → user → `.claude/settings.json` (shared) → `.claude/settings.local.json` (personal) | Permissions, hooks, env, model |
+| **Rules** | `.claude/rules/` | Scoped instructions by path |
+| **Skills** | `.claude/skills/<name>/SKILL.md` | On-demand procedures |
+| **Commands** | Built-in + custom `/slash` commands | Reusable prompts |
+| **Agents** | `.claude/agents/` | Subagents with own tools + context |
+| **Modes** | default · acceptEdits · plan · auto · dontAsk · bypassPermissions | How much it asks first |
+| **Headless** | `claude -p "…" --output-format json` | CI and scripts |
+
+???
+Managed settings (managed-settings.json) win over everything. Project settings are committed and shared; settings.local.json is gitignored for personal preferences. A deny rule beats an allow rule in any mode.
+
+Modes: dontAsk allows only pre-approved tools (CI). bypassPermissions only inside an isolated container or VM. auto uses a classifier.
+
+MCP servers for a project: .mcp.json at the repo root. Secrets as ${ENV_VAR}, never committed.
+
+CLAUDE.md loads every session; keep it short (it loses weight past a few hundred lines). Rules in .claude/rules/ can be scoped with a paths glob.
+
+Hooks are configured in settings.json. Plugins bundle commands, skills, agents, hooks and MCP servers for distribution.
+
+Agent Memory: Claude Code can keep and recall project memory across sessions.
+
+---
+
+class: question
+
+.q-label[Q12 · D3 + D2 Configuration Management]
+
+.stem[A team wants every developer's Claude Code to be blocked from reading `.env` files. Individual developers also want personal model preferences that stay out of git. Where should each setting go?]
+
+.options[
+- **A.** Both in the project CLAUDE.md.
+- **B.** The `.env` deny rule in `.claude/settings.json` (committed); personal preferences in `.claude/settings.local.json`.
+- **C.** The `.env` deny rule in each developer's `~/.claude/settings.json`; preferences in the project CLAUDE.md.
+- **D.** A line in the system prompt asking Claude not to open `.env` files.
+]
+
+---
+
+class: answer
+
+.q-label[Q12 · Answer]
+
+.correct[B · Shared rule in project settings, personal prefs in local settings]
+
+| Option | Pattern | Why it fails |
+|---|---|---|
+| A | Prompt as policy | CLAUDE.md is context, not an enforced permission |
+| C | Wrong layer | Relies on every person configuring it; prefs leak into git |
+| D | Prompt as policy | Not enforceable; can be overridden |
+
+*Right layer: enforce in settings, share in the repo, keep personal stuff local.*
+
+---
+
+class: dense
+
+.eyebrow-label[D4 · Eval, Testing, and Debugging · 2.6%]
+
+# Integration layer or model output?
+
+| Error | Meaning | Recovery |
+|---|---|---|
+| 400 `invalid_request_error` | Your request is malformed | Fix the code; don't retry as-is |
+| 401 / 403 | Auth or permission | Fix the key or scope |
+| 413 | Request too large | Trim input |
+| 429 `rate_limit_error` | Over your limit | Back off; honor `retry-after` |
+| 500 / 529 `overloaded_error` | Server side | Retry with exponential backoff |
+
+**Read the trace first:** request payload → `stop_reason` → tool_use/tool_result pairing → only then the prompt.
+
+???
+Retriable: 429, 500, 502, 503, 504, 529. Fail fast: 400, 401, 403, 404. 529 is Anthropic-side overload, not your rate limit. A refusal is HTTP 200 with stop_reason refusal: don't retry it. Don't stack your own retry loop on top of the SDK's.
+
+Skill 4.1: error type identification, recovery strategy selection, trace analysis, isolating integration layer vs model output. SDKs retry 408/409/429/5xx twice by default.
+
+Evals: assert properties (field present, value in range, parses), not exact text, because output is non-deterministic. Use a model-graded judge for meaning. Keep a regression set before any model or prompt change.
+
+---
+
+class: question
+
+.q-label[Q13 · D4 Debugging]
+
+.stem[After a refactor of the history-building code, 15% of agent requests fail with `invalid_request_error: tool_result block references unknown tool_use_id`. The team has rewritten the tool descriptions twice. What should they do next?]
+
+.options[
+- **A.** Rewrite the tool descriptions a third time with clearer exclusion conditions.
+- **B.** Switch to a more capable model that tracks tool IDs better.
+- **C.** Inspect failing request traces and fix the code so each `tool_result` echoes the exact `tool_use_id` in the next user turn.
+- **D.** Wrap the call in a retry loop with exponential backoff.
+]
+
+---
+
+class: answer
+
+.q-label[Q13 · Answer]
+
+.correct[C · It's an integration bug: read the trace, fix the code]
+
+| Option | Pattern | Why it fails |
+|---|---|---|
+| A | Wrong layer | A 400 validation error is not a prompt problem |
+| B | Swap the model | The API rejects the request before the model runs |
+| D | Wrong recovery | Retrying a malformed request fails identically |
+
+---
+
+class: question
+
+.q-label[Rapid fire · True or false?]
+
+.options[
+- **1.** Temperature 0 guarantees identical outputs.
+- **2.** Claude executes your custom tools on Anthropic's servers.
+- **3.** MCP tool definitions consume context even when no tool is called.
+- **4.** Batch results come back in the order you submitted them.
+- **5.** Thinking blocks can be summarized to save context mid tool loop.
+- **6.** Structured outputs guarantee a parseable object even when `stop_reason` is `max_tokens`.
+]
+
+---
+
+class: answer
+
+.q-label[Rapid fire · Answers]
+
+| # | Answer | Why |
+|---|---|---|
+| 1 | **False** | Sampling; never guaranteed. Newest models reject the param |
+| 2 | **False** | Your code runs client tools; only server tools run at Anthropic |
+| 3 | **True** | Definitions load up front; defer or allowlist |
+| 4 | **False** | Key results by `custom_id` |
+| 5 | **False** | Return them unchanged or the next request fails |
+| 6 | **False** | Truncation still breaks the object; check `stop_reason` |
+
+---
+
+class: title, divider
+
+.session-label[SEGMENT 5 · 1:50 → 2:00 · 10 MIN]
+
+# Your readiness map and study plan
+
+.chips[
+.chip[Self-assessment]
+.chip[Two-week plan]
+.chip[Registration]
+]
+
+---
+
+class: dense
+
+# Readiness map: rate yourself 0–2
+
+| Domain | Weight | You're ready when you can… |
+|---|---|---|
+| D2 Applications | 33.1% | Pick sync/stream/async/batch; place cache breakpoints; read any `stop_reason` |
+| D5 Models | 16.8% | Justify a tier + effort with an eval; explain tokens, sampling, thinking |
+| D1 Agents | 14.7% | Say workflow vs agent; choose manual loop / SDK / Managed Agents |
+| D6 Prompt + context | 11.0% | Map a failure to its missing piece; name four context levers |
+| D8 Tools + MCP | 10.6% | Write a tool description; choose built-in / custom / Skill / MCP |
+| D7 Security | 8.1% | Isolate untrusted input; layer guardrails; keep keys server-side |
+| D3 Claude Code | 3.1% | Put a setting at the right layer; run headless |
+| D4 Debugging | 2.6% | Tell a 400 from a 429 from a model mistake |
+
+???
+Any domain at 0 with weight over 10% is your first study block.
+
+---
+
+class: dense
+
+# Two-week study plan
+
+| Days | Focus | Material |
+|---|---|---|
+| 1–2 | Blueprint + fundamentals | Exam guide · prep lesson 1 · Q1–Q4 |
+| 3–5 | API mechanics, caching, batches, streaming | Prep lesson 2 · docs · exercises 01–02 |
+| 6–7 | Models, effort, cost | Model docs · pricing · Q3–Q4 again |
+| 8–9 | Agents, tools, MCP | Prep lessons 2–3 · exercises 03–04 |
+| 10–11 | Prompting, context, security | Prep lesson 4 · Q9–Q13 |
+| 12 | Claude Code, debugging | Prep lesson 3 · settings docs |
+| 13 | Full timed practice | All repo questions, 2 min 15 s each |
+| 14 | Review misses only | cheatsheet.md · community question banks |
+
+**Build one small app end to end:** API + one tool + caching + an eval + basic guardrails. The guide asks for it.
+
+???
+The official prep path is about 13 hours across five lessons. It spends only ~7% of its time on D5, which is 16.8% of the exam, so add model and cost study on top.
+
+---
+
+class: dense
+
+# Official prep path → blueprint
+
+| Prep lesson | Time | Domains it feeds |
+|---|---|---|
+| 1 · MSO Foundations | 57 min | D5 fundamentals |
+| 2 · Prompting, Agents & Tool Use | 209 min | D2, D6, D1, D8 |
+| 3 · Claude Code, MCP & Integration | 142 min | D3, D8, D2 config |
+| 4 · Production Engineering, Evals & Security | 211 min | D4, D7, D5 cost |
+| 5 · Accelerators & IP Contribution | 155 min | D2 life cycle, D8 packaging |
+
+.source-line[anthropic-partners.skilljar.com/path/claude-certified-developer-foundations]
+
+???
+Lessons 1–4 carry almost all the exam weight. Lesson 5 is useful for partner delivery work but lighter on the blueprint.
+
+---
+
+# Registering and exam day
+
+.takeaways[
+<ol>
+<li><span class="num">1</span><div class="body"><strong>Register with a Partner Network email.</strong><span>Partner Academy certification page → purchase → Pearson VUE scheduling.</span></div></li>
+<li><span class="num">2</span><div class="body"><strong>Online or test center.</strong><span>Government ID, clean desk, webcam for OnVUE. Closed book.</span></div></li>
+<li><span class="num">3</span><div class="body"><strong>Reschedule 48 h ahead to be safe.</strong><span>Retakes after 14, 30, then 90 days.</span></div></li>
+<li><span class="num">4</span><div class="body"><strong>~2 min 15 s per item.</strong><span>Read the last line first, underline the constraint, strike the distractor patterns, flag and move on.</span></div></li>
+</ol>
+]
+
+---
+
+# If you remember seven things
+
+.takeaways[
+<ol>
+<li><span class="num">1</span><div class="body"><strong>Read stop_reason before content.</strong><span>Truncation, refusal, tool_use, window full.</span></div></li>
+<li><span class="num">2</span><div class="body"><strong>User waiting? Realtime. Bulk that can wait? Batch.</strong><span>50% off, up to 24 h.</span></div></li>
+<li><span class="num">3</span><div class="body"><strong>Stable prefix first, then cache.</strong><span>Volatile bytes after the last breakpoint.</span></div></li>
+<li><span class="num">4</span><div class="body"><strong>Evals move you between tiers.</strong><span>Start Sonnet; tune effort per route.</span></div></li>
+<li><span class="num">5</span><div class="body"><strong>Claude asks, your code runs.</strong><span>Pair every tool_use; return errors with is_error.</span></div></li>
+<li><span class="num">6</span><div class="body"><strong>Reusable connection → MCP. Procedure → Skill.</strong><span>Must-happen rule → hook.</span></div></li>
+<li><span class="num">7</span><div class="body"><strong>Prompts ask; code enforces.</strong><span>Isolate untrusted input, least privilege, keys server-side.</span></div></li>
+</ol>
+]
+
+---
+
+class: title
+
+.session-label[RESOURCES · Q&A]
+
+# Thank you. Questions?
+
+- [Official CCDV-F Exam Guide v1.0 (PDF)](https://everpath-course-content.s3-accelerate.amazonaws.com/instructor%2F6nizmqk8tpzpfjvt6qmmav7rh%2Fpublic%2F1783542875%2FClaude+Certified+Developer+%E2%80%93+Foundations+Exam+Guide.pdf)
+- [Official prep path](https://anthropic-partners.skilljar.com/path/claude-certified-developer-foundations) · 5 lessons, ~13 h
+- [Claude API docs](https://platform.claude.com/docs) · [Claude Code docs](https://code.claude.com/docs) · [MCP docs](https://modelcontextprotocol.io)
+- [Course repo](https://github.com/EnkrateiaLucca/claude-dev-cert-prep) · questions, cheat sheet, exercises
+
+.footer[Lucas Soares<span>O'Reilly Live Training</span>]
+
+???
+Certification FAQ: https://anthropic-partners.skilljar.com/page/faq-certifications
+
+Pearson VUE: https://www.pearsonvue.com/us/en/anthropic.html
+
+  </textarea>
+  <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+  <script>
+    var slideshow = remark.create({
+      ratio: '16:9',
+      countIncrementalSlides: false,
+      highlightLanguage: 'no-highlight',
+      navigation: { scroll: false }
+    });
+  </script>
+</body>
+</html>
