@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Request shapes: tokens vs price</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,600;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f3eee4; --surface:#fffdf8; --ink:#1a1a1a; --muted:#5f5a52; --rule:#d9d2c4;
+  --accent:#a8582a; --accent-soft:#f1e2d6; --head:#1c1c1c; --head-ink:#fff; --good:#3d6b45;
+  color-scheme: light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1b1a18; --surface:#24221f; --ink:#f0ebe2; --muted:#b0a898; --rule:#3a3732;
+    --accent:#e08a57; --accent-soft:#3a2a20; --head:#0f0f0f; --head-ink:#f0ebe2; --good:#8fc39a;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1b1a18; --surface:#24221f; --ink:#f0ebe2; --muted:#b0a898; --rule:#3a3732;
+  --accent:#e08a57; --accent-soft:#3a2a20; --head:#0f0f0f; --head-ink:#f0ebe2; --good:#8fc39a;
+  color-scheme: dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.5}
+main{max-width:760px;margin:0 auto;padding:2.5rem 1.25rem 3rem}
+h1{font-size:clamp(1.8rem,5vw,2.6rem);font-weight:800;letter-spacing:-.02em;margin:0 0 .4rem;line-height:1.1}
+.lede{color:var(--muted);font-size:1.05rem;margin:0 0 2rem;max-width:62ch}
+.lede strong{color:var(--ink)}
+
+/* calculator */
+.calc{background:var(--surface);border:2px solid var(--head);padding:1.1rem 1.1rem 1.25rem}
+.inputs{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.75rem 1rem;margin-bottom:1.25rem}
+label{display:block;font-size:.8rem;color:var(--muted)}
+input{width:100%;margin-top:.2rem;font:inherit;font-size:1rem;padding:.4rem .5rem;border:1px solid var(--rule);background:var(--bg);color:var(--ink);border-radius:3px}
+input:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.rates-note{font-size:.8rem;color:var(--muted);margin:-.4rem 0 1rem}
+
+.rows{display:grid;gap:.5rem}
+.row{display:grid;grid-template-columns:150px 1fr 90px;align-items:center;gap:.75rem;width:100%;text-align:left;font:inherit;color:inherit;background:none;border:1px solid transparent;padding:.45rem .5rem;border-radius:3px;cursor:pointer}
+.row:hover{background:var(--accent-soft)}
+.row[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.row .name{font-weight:600;color:var(--accent)}
+.bar{height:14px;background:var(--rule);position:relative;border-radius:2px;overflow:hidden}
+.bar span{position:absolute;inset:0 auto 0 0;background:var(--accent);transition:width .25s ease}
+.row .cost{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.tokens{margin-top:.9rem;font-size:.9rem;color:var(--muted)}
+.tokens b{color:var(--ink);font-variant-numeric:tabular-nums}
+
+/* detail */
+.detail{margin-top:1.75rem}
+.detail h2{font-size:1.35rem;margin:0 0 .75rem}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
+.cols h3{font-size:.95rem;margin:0 0 .35rem}
+.cols ul{margin:0;padding-left:1.1rem}
+.cols li{margin:.25rem 0}
+.use h3{color:var(--good)}
+.avoid h3{color:var(--accent)}
+.billing{margin:1rem 0 0;padding:.75rem .9rem;background:var(--surface);border-left:3px solid var(--accent);font-size:.95rem}
+.tag{font-size:.75rem;font-weight:600;color:var(--muted)}
+
+.rule{margin-top:2.25rem;font-style:italic;color:var(--muted);font-size:1.1rem}
+.foot{margin-top:1.5rem;font-size:.8rem;color:var(--muted)}
+.foot a{color:var(--accent)}
+
+@media (max-width:560px){
+  .row{grid-template-columns:110px 1fr 72px}
+  .cols{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){.bar span{transition:none}}
+</style>
+</head>
+<body>
+<main>
+  <h1>Same tokens, different bill</h1>
+  <p class="lede">The request shape decides <strong>how</strong> tokens reach you and <strong>when</strong>, not how many there are. Only one shape changes the price per token.</p>
+
+  <section class="calc" aria-label="Cost calculator">
+    <div class="inputs">
+      <label>Requests<input id="n" type="number" min="1" value="1000"></label>
+      <label>Input tokens / req<input id="tin" type="number" min="0" value="2000"></label>
+      <label>Output tokens / req<input id="tout" type="number" min="0" value="500"></label>
+      <label>$ / MTok input<input id="pin" type="number" min="0" step="0.01" value="3"></label>
+      <label>$ / MTok output<input id="pout" type="number" min="0" step="0.01" value="15"></label>
+    </div>
+    <p class="rates-note">Rates are placeholders. Enter your model’s current prices from the pricing page.</p>
+
+    <div class="rows" id="rows"></div>
+    <p class="tokens">Tokens billed in every shape: <b id="tok"></b></p>
+  </section>
+
+  <section class="detail" aria-live="polite">
+    <h2 id="d-title"></h2>
+    <div class="cols">
+      <div class="use"><h3>Use when</h3><ul id="d-use"></ul></div>
+      <div class="avoid"><h3>Avoid when</h3><ul id="d-avoid"></ul></div>
+    </div>
+    <p class="billing" id="d-bill"></p>
+  </section>
+
+  <p class="rule">Is a user waiting? Then realtime. Is it bulk and can it wait? Then batch.</p>
+  <p class="foot">Batch discount (50% on input and output) from the <a href="https://docs.claude.com/en/docs/about-claude/pricing" target="_blank" rel="noopener">Claude pricing docs</a>. Items tagged [Inference] or [Unverified] are not confirmed against official docs.</p>
+</main>
+
+<script>
+const shapes = [
+  { id:"sync", name:"Synchronous", mult:1,
+    use:["Short calls where the full answer is needed before acting","Backend jobs, classification, extraction with small outputs"],
+    avoid:["Long outputs: the request can time out before the response arrives","A user is staring at a spinner"],
+    bill:"Standard price. [Inference] A timeout followed by a retry means paying for the input tokens again, so long synchronous calls can cost more in practice."},
+  { id:"stream", name:"Streaming (SSE)", mult:1,
+    use:["A user is watching the answer appear","Long or large outputs that would risk a timeout"],
+    avoid:["Backend jobs that only act on the finished result: extra parsing code, no cost benefit","You don’t want to handle partial blocks and dropped connections"],
+    bill:"Standard price; same tokens as synchronous. Streaming changes perceived latency, not cost. [Unverified] Tokens generated before a dropped connection are likely still billed."},
+  { id:"async", name:"Async client", mult:1,
+    use:["Many realtime calls in parallel without blocking your app","Fan-out over several prompts while a user waits"],
+    avoid:["The work can wait: batch does the same job at half price","You’re already near your rate limits: more concurrency means more 429s"],
+    bill:"Standard price. [Inference] Async is a client-side concurrency pattern; each call is an ordinary realtime request to the API."},
+  { id:"batch", name:"Message Batches", mult:0.5,
+    use:["Bulk and offline: evals, dataset labeling, document processing","Nobody is waiting on any single result"],
+    avoid:["A user is waiting (results can take up to 24 h)","Agent loops where each turn depends on the previous answer","You can’t match results by custom_id (they come back out of order)"],
+    bill:"50% off both input and output tokens (sourced). [Unverified] Prompt caching can also be used inside batches; third-party sources disagree on this, so check the batch processing docs before promising students the stacked discount."}
+];
+
+let current = "batch";
+const $ = id => document.getElementById(id);
+const fmt$ = v => "$" + (v < 10 ? v.toFixed(2) : v.toLocaleString(undefined,{maximumFractionDigits:0}));
+
+function render(){
+  const n = +$("n").value||0, tin=+$("tin").value||0, tout=+$("tout").value||0;
+  const pin=+$("pin").value||0, pout=+$("pout").value||0;
+  const base = n*(tin*pin + tout*pout)/1e6;
+  $("tok").textContent = (n*tin).toLocaleString()+" in + "+(n*tout).toLocaleString()+" out";
+  $("rows").innerHTML = shapes.map(s=>{
+    const c = base*s.mult, w = base ? (c/base*100) : 0;
+    return `<button class="row" data-id="${s.id}" aria-pressed="${s.id===current}">
+      <span class="name">${s.name}</span>
+      <span class="bar" aria-hidden="true"><span style="width:${w}%"></span></span>
+      <span class="cost">${fmt$(c)}</span></button>`;
+  }).join("");
+  const s = shapes.find(x=>x.id===current);
+  $("d-title").textContent = s.name;
+  $("d-use").innerHTML = s.use.map(x=>`<li>${x}</li>`).join("");
+  $("d-avoid").innerHTML = s.avoid.map(x=>`<li>${x}</li>`).join("");
+  $("d-bill").textContent = s.bill;
+}
+$("rows").addEventListener("click",e=>{
+  const b=e.target.closest(".row"); if(!b) return; current=b.dataset.id; render();
+});
+["n","tin","tout","pin","pout"].forEach(id=>$(id).addEventListener("input",render));
+render();
+</script>
+</body>
+</html>
